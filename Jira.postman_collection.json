@@ -1,0 +1,322 @@
+{
+	"info": {
+		"_postman_id": "2fe5a8e1-322b-48fe-8bdf-d97ebb764c55",
+		"name": "Jira",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Createmeta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"project_key\", jsonData.projects[1].key);\r",
+							"pm.collectionVariables.set(\"issuetype_ID\", jsonData.projects[1].issuetypes[0].id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://89.223.126.182:8080/rest/api/2/issue/createmeta",
+					"protocol": "http",
+					"host": [
+						"89",
+						"223",
+						"126",
+						"182"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"issue",
+						"createmeta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "issue",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"URL_issue\", jsonData.self);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let randomNum = Math.floor((Math.random() * 100))\r",
+							"\r",
+							"pm.collectionVariables.set(\"summary\", \"Anvarov issue \" + randomNum);\r",
+							"pm.collectionVariables.set(\"description\", \"Anvarov description \"+ randomNum);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fields\": {\r\n    \"project\": { \r\n      \"key\": \"{{project_key}}\"\r\n    },\r\n    \"summary\": \"{{summary}}\",\r\n    \"description\": \"{{description}}\",\r\n    \"issuetype\": {\r\n      \"id\": \"{{issuetype_ID}}\"\r\n    }\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://89.223.126.182:8080/rest/api/2/issue",
+					"protocol": "http",
+					"host": [
+						"89",
+						"223",
+						"126",
+						"182"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"api",
+						"2",
+						"issue"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "issue",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Description & summary test\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.fields.summary).to.equal(pm.collectionVariables.get(\"summary\"));\r",
+							"    pm.expect(jsonData.fields.description).to.equal(pm.collectionVariables.get(\"description\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL_issue}}",
+					"host": [
+						"{{URL_issue}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transitions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"transition\", jsonData.transitions[2].id);\r",
+							"pm.collectionVariables.set(\"transitionToId\", jsonData.transitions[2].to.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{URL_issue}}/transitions",
+					"host": [
+						"{{URL_issue}}"
+					],
+					"path": [
+						"transitions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transitions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"transition\": {\r\n      \"id\": \"{{transition}}\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_issue}}/transitions",
+					"host": [
+						"{{URL_issue}}"
+					],
+					"path": [
+						"transitions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check status issue",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status check is IN WORK\", function(){\r",
+							"    jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.fields.status.id).to.equal(pm.collectionVariables.get(\"transitionToId\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL_issue}}",
+					"host": [
+						"{{URL_issue}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "123456",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "anvarovyuriy@gmail.com",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "project_key",
+			"value": ""
+		},
+		{
+			"key": "issuetype_ID",
+			"value": ""
+		},
+		{
+			"key": "URL_issue",
+			"value": ""
+		},
+		{
+			"key": "transition",
+			"value": ""
+		},
+		{
+			"key": "transitionToId",
+			"value": ""
+		},
+		{
+			"key": "summary",
+			"value": ""
+		},
+		{
+			"key": "description",
+			"value": ""
+		}
+	]
+}
