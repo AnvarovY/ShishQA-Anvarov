@@ -1,0 +1,44 @@
+body {
+    padding: 0 30px;
+    font-size: 16px;
+    line-height: 26px;
+    font-family: "Arial", sans-serif;
+    color: #222222;
+    max-width: 920px;
+    background: #ffffff url("img/bg-page.png") no-repeat top center;
+    margin: 0 auto;
+}
+
+h1 {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: normal;
+}
+
+h2 {
+    font-size: 20px;
+    line-height: normal;
+}
+
+.avatar {
+    border-radius: 1%;
+}
+
+.avatar-container {
+    text-align: left;
+}
+
+footer {
+    margin-top: 30px;
+    padding-top: 10px;
+    color: #aaaaaa;
+    border-top: 1px solid #aaaaaa;
+}
+
+.page-title {
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 42px;
+    font-family: "Verdana", sans-serif;
+    text-align: center;
+}
